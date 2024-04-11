@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "EA13EAD7-95EC-4A3C-8B55-79836CD76DEA"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "B2680B1B-D2EE-436C-BDCD-64BC895A0C08"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "speedtest/SpeedTestViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "175"
+            endingLineNumber = "175"
+            landmarkName = "urlSession(_:task:didCompleteWithError:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  uuid = "B2680B1B-D2EE-436C-BDCD-64BC895A0C08 - 54f9012330be04fc"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "speedtest.SpeedTestViewController.urlSession(_: __C.NSURLSession, task: __C.NSURLSessionTask, didSendBodyData: Swift.Int64, totalBytesSent: Swift.Int64, totalBytesExpectedToSend: Swift.Int64) -&gt; ()"
+                  moduleName = "speedtest"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/daniilkhomakov/Documents/GitHub/speedtest/speedtest/SpeedTestViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "176"
+                  endingLineNumber = "176"
+                  offsetFromSymbolStart = "432">
+               </Location>
+               <Location
+                  uuid = "B2680B1B-D2EE-436C-BDCD-64BC895A0C08 - 5606d4e961fd186c"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "speedtest.SpeedTestViewController.urlSession(_: __C.NSURLSession, task: __C.NSURLSessionTask, didCompleteWithError: Swift.Optional&lt;Swift.Error&gt;) -&gt; ()"
+                  moduleName = "speedtest"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/daniilkhomakov/Documents/GitHub/speedtest/speedtest/SpeedTestViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "175"
+                  endingLineNumber = "175"
+                  offsetFromSymbolStart = "52">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>

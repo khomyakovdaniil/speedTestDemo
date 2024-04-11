@@ -9,21 +9,33 @@
 /* Begin PBXBuildFile section */
 		5F8A07E32BC2F9400079987A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8A07E22BC2F9400079987A /* AppDelegate.swift */; };
 		5F8A07E52BC2F9400079987A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8A07E42BC2F9400079987A /* SceneDelegate.swift */; };
-		5F8A07E72BC2F9400079987A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8A07E62BC2F9400079987A /* ViewController.swift */; };
+		5F8A07E72BC2F9400079987A /* SpeedTestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8A07E62BC2F9400079987A /* SpeedTestViewController.swift */; };
 		5F8A07EA2BC2F9400079987A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5F8A07E82BC2F9400079987A /* Main.storyboard */; };
 		5F8A07EC2BC2F9420079987A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F8A07EB2BC2F9420079987A /* Assets.xcassets */; };
 		5F8A07EF2BC2F9420079987A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5F8A07ED2BC2F9420079987A /* LaunchScreen.storyboard */; };
+		5F8A07FA2BC3D6590079987A /* URLRequest+AddData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8A07F92BC3D6580079987A /* URLRequest+AddData.swift */; };
+		5F8A07FC2BC3DB820079987A /* NSMutableData+Append.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8A07FB2BC3DB820079987A /* NSMutableData+Append.swift */; };
+		5F8A07FE2BC3DDA20079987A /* Double+BytesToMBit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8A07FD2BC3DDA20079987A /* Double+BytesToMBit.swift */; };
+		5F8A08002BC542EA0079987A /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8A07FF2BC542EA0079987A /* SettingsViewController.swift */; };
+		5F8A08022BC55BCC0079987A /* SettingsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8A08012BC55BCC0079987A /* SettingsManager.swift */; };
+		5F8A08042BC55C2B0079987A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F8A08032BC55C2B0079987A /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		5F8A07DF2BC2F9400079987A /* speedtest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = speedtest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F8A07E22BC2F9400079987A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		5F8A07E42BC2F9400079987A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		5F8A07E62BC2F9400079987A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		5F8A07E62BC2F9400079987A /* SpeedTestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedTestViewController.swift; sourceTree = "<group>"; };
 		5F8A07E92BC2F9400079987A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		5F8A07EB2BC2F9420079987A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5F8A07EE2BC2F9420079987A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		5F8A07F02BC2F9420079987A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5F8A07F92BC3D6580079987A /* URLRequest+AddData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLRequest+AddData.swift"; sourceTree = "<group>"; };
+		5F8A07FB2BC3DB820079987A /* NSMutableData+Append.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSMutableData+Append.swift"; sourceTree = "<group>"; };
+		5F8A07FD2BC3DDA20079987A /* Double+BytesToMBit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+BytesToMBit.swift"; sourceTree = "<group>"; };
+		5F8A07FF2BC542EA0079987A /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		5F8A08012BC55BCC0079987A /* SettingsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsManager.swift; sourceTree = "<group>"; };
+		5F8A08032BC55C2B0079987A /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,15 +68,29 @@
 		5F8A07E12BC2F9400079987A /* speedtest */ = {
 			isa = PBXGroup;
 			children = (
+				5F8A07F82BC3D63F0079987A /* Extensions */,
 				5F8A07E22BC2F9400079987A /* AppDelegate.swift */,
 				5F8A07E42BC2F9400079987A /* SceneDelegate.swift */,
-				5F8A07E62BC2F9400079987A /* ViewController.swift */,
+				5F8A07E62BC2F9400079987A /* SpeedTestViewController.swift */,
+				5F8A07FF2BC542EA0079987A /* SettingsViewController.swift */,
+				5F8A08012BC55BCC0079987A /* SettingsManager.swift */,
+				5F8A08032BC55C2B0079987A /* Constants.swift */,
 				5F8A07E82BC2F9400079987A /* Main.storyboard */,
 				5F8A07EB2BC2F9420079987A /* Assets.xcassets */,
 				5F8A07ED2BC2F9420079987A /* LaunchScreen.storyboard */,
 				5F8A07F02BC2F9420079987A /* Info.plist */,
 			);
 			path = speedtest;
+			sourceTree = "<group>";
+		};
+		5F8A07F82BC3D63F0079987A /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				5F8A07F92BC3D6580079987A /* URLRequest+AddData.swift */,
+				5F8A07FB2BC3DB820079987A /* NSMutableData+Append.swift */,
+				5F8A07FD2BC3DDA20079987A /* Double+BytesToMBit.swift */,
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -138,9 +164,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5F8A07E72BC2F9400079987A /* ViewController.swift in Sources */,
+				5F8A07E72BC2F9400079987A /* SpeedTestViewController.swift in Sources */,
+				5F8A07FC2BC3DB820079987A /* NSMutableData+Append.swift in Sources */,
 				5F8A07E32BC2F9400079987A /* AppDelegate.swift in Sources */,
 				5F8A07E52BC2F9400079987A /* SceneDelegate.swift in Sources */,
+				5F8A08042BC55C2B0079987A /* Constants.swift in Sources */,
+				5F8A07FE2BC3DDA20079987A /* Double+BytesToMBit.swift in Sources */,
+				5F8A07FA2BC3D6590079987A /* URLRequest+AddData.swift in Sources */,
+				5F8A08002BC542EA0079987A /* SettingsViewController.swift in Sources */,
+				5F8A08022BC55BCC0079987A /* SettingsManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -305,7 +337,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "-.speedtest";
+				PRODUCT_BUNDLE_IDENTIFIER = "-.speedtestKhomyakov";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -333,7 +365,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "-.speedtest";
+				PRODUCT_BUNDLE_IDENTIFIER = "-.speedtestKhomyakov";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

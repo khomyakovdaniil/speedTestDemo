@@ -7,130 +7,186 @@
 
 import UIKit
 
-class ViewController: UIViewController, URLSessionDelegate, URLSessionDataDelegate {
+final class SpeedTestViewController: UIViewController {
     
+    // MARK: - Outlets
     
-    typealias speedTestCompletionHandler = (_ megabytesPerSecond: Double? , _ error: Error?) -> Void
+    @IBOutlet weak var downloadSpeedCurrentLabel: UILabel!
+    @IBOutlet weak var downloadSpeedMeasuredLabel: UILabel!
+    @IBOutlet weak var uploadSpeedCurrentLabel: UILabel!
+    @IBOutlet weak var uploadSpeedMeasuredLabel: UILabel!
     
-    var speedTestCompletionBlock : speedTestCompletionHandler?
+    // MARK: - Actions
     
+    @IBAction func userDidTapTestSpeedButton(_ sender: Any) {
+        checkSpeed()
+    }
+    
+    // MARK: - Properties
+    
+    // Used to show result speed and launch upload test if needed
+    var downloadCompletionBlock: (() -> Void)?
+    
+    // Used to track progress
     var startTime: CFAbsoluteTime!
     var stopTime: CFAbsoluteTime!
     var bytesReceived: Int!
-    var downloadTask: URLSessionDataTask!
     
+    // Shared URL session
     var session: URLSession?
-    var ___obs: NSKeyValueObservation?
     
-    var timer: Timer?
-    var uploadTask: URLSessionDataTask!
+    // Test image to get data for uploading
+    let image = UIImage(named: Constants.testImageName)!
+    
+    // Is either downloaded data or test image data
     var data = NSMutableData()
-    var previousBytesSent: Int64 = 0
-    var previousBytesSentFraction: Int64 = 0
     
+    // MARK: - ViewLifeCycle
     
     override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-        
-        checkForSpeedTest()
+        // Conguring URLSession, no cache storage and long timeout, delegate to self to read actual speed
+        let configuration = URLSessionConfiguration.ephemeral
+        configuration.timeoutIntervalForResource = Constants.standartTimeout
+        configuration.requestCachePolicy = .reloadIgnoringCacheData
+        session = URLSession.init(configuration: configuration, delegate: self, delegateQueue: nil)
     }
     
-    func checkForSpeedTest() {
+    // MARK: - Private functions
+    
+    private func checkSpeed() {
+        // Checking if the user wants to check download and upload speed
+        let checkState: (Bool, Bool) = (!SettingsManager.getSkipDownloadSpeed(), !SettingsManager.getSkipUploadSpeed())
         
-        testDownloadSpeedWithTimout(timeout: 100.0) { (speed, error) in
-            print("Download Speed:", speed ?? "NA")
-            print("Speed Test Error:", error ?? "NA")
-            DispatchQueue.main.async {
-                self.startTime = CFAbsoluteTimeGetCurrent()
+        switch checkState {
+        case (true, false):
+            // Running testDownload and showing results in completion
+            testDownload { [weak self] in
+                guard let self else { return }
+                DispatchQueue.main.async {
+                    self.downloadSpeedMeasuredLabel.text = self.downloadSpeedCurrentLabel.text
+                    self.downloadSpeedCurrentLabel.text = String(0.0)
+                }
+            }
+        case (false, true):
+            // If no data was downloaded previously then we use data from test image
+            if data.isEmpty {
+                data.append(image.pngData()!)
+            }
+            // Running test upload with given data
+            self.testUpload(with: data as Data)
+        case (true, true):
+            // Running testDownload and testUpload afterwards
+            testDownload { [weak self] in
+                guard let self else { return }
+                DispatchQueue.main.async {
+                    self.downloadSpeedMeasuredLabel.text = self.downloadSpeedCurrentLabel.text
+                    self.downloadSpeedCurrentLabel.text = String(0.0)
+                }
                 self.testUpload(with: self.data as Data)
-                self.speedTestCompletionBlock = nil
+            }
+        case (false, false):
+            return
+        }
+    }
+    
+    private func testDownload(completionBlock: @escaping () -> Void) {
+        
+        // Retrieving server URL which is either default or user provided
+        guard let url = SettingsManager.getDownloadURL() else { return }
+        
+        // Resetting the timestamps and data count to calculate speed
+        startTime = CFAbsoluteTimeGetCurrent()
+        bytesReceived = 0
+        
+        // Saving the completion block to run it from delegate later
+        downloadCompletionBlock = completionBlock
+        
+        // Running the download task
+        session?.dataTask(with: url).resume()
+    }
+    
+    private func testUpload(with data: Data) {
+        
+        // Retrieving server URL which is either default or user provided
+        guard let url = SettingsManager.getUploadURL() else { return }
+        
+        // Creating a upload request with proper body syntax
+        guard let urlRequest = URLRequest(url: url).createDataUploadRequest(fileName: Constants.testImageName, data: data, mimeType: Constants.testImageMimeType) else {
+            return
+        }
+        
+        // Resetting the timer
+        self.startTime = CFAbsoluteTimeGetCurrent()
+        
+        // Creating upload task with showing results in completion
+        let uploadTask = session?.dataTask(with: urlRequest) { [weak self] (data, response, error) in
+            
+            // Just basic debugging, can be removed
+            guard let self else { return }
+            if let error {
+                print("error \(error.localizedDescription)")
+            }
+            else if let response {
+                print("response \(response)")
+            }
+            print("finished uploading data \(data)")
+            
+            // Showing the results
+            DispatchQueue.main.async {
+                self.uploadSpeedMeasuredLabel.text = self.uploadSpeedCurrentLabel.text
+                self.uploadSpeedCurrentLabel.text = String(0.0)
             }
         }
         
+        // Running the upload task
+        uploadTask?.resume()
     }
-    
-    func testDownloadSpeedWithTimout(timeout: TimeInterval, withCompletionBlock: @escaping speedTestCompletionHandler) {
-        
-        guard let url = URL(string: "http://moscow.speedtest.rt.ru:8080/speedtest/random7000x7000.jpg") else { return }
-        
-        startTime = CFAbsoluteTimeGetCurrent()
-        stopTime = startTime
-        bytesReceived = 0
-        
-        speedTestCompletionBlock = withCompletionBlock
-        
-        let configuration = URLSessionConfiguration.ephemeral
-        configuration.timeoutIntervalForResource = timeout
-        session = URLSession.init(configuration: configuration, delegate: self, delegateQueue: nil)
-        session!.dataTask(with: url).resume()
-    }
+}
+
+    // MARK: - URLSessionDelegate
+
+extension SpeedTestViewController: URLSessionDataDelegate {
     
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
+        
+        // Calculate the size of data downloaded
         bytesReceived! += data.count
+        
+        // Saving the data to use it for upload test in the future
         self.data.append(data)
+        
+        // Calculating speed by dividing size by time
         stopTime = CFAbsoluteTimeGetCurrent()
         let elapsed = stopTime - startTime
         let speed = elapsed != 0 ? (Double(bytesReceived) / elapsed).bytesToMbit() : 0
+        
+        // Showing current speed
+        DispatchQueue.main.async {
+            self.downloadSpeedCurrentLabel.text = String(format: "%.2f", speed)
+        }
+        
         print("download speed \(speed)")
     }
     
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         
-        let elapsed = stopTime - startTime
-        
-        if let aTempError = error as NSError?, aTempError.domain != NSURLErrorDomain && aTempError.code != NSURLErrorTimedOut && elapsed == 0  {
-            speedTestCompletionBlock?(nil, error)
-            return
-        }
-        
-        let speed = elapsed != 0 ? Double(bytesReceived) / elapsed / 1024.0 / 1024.0 : -1
-        speedTestCompletionBlock?(speed, nil)
+        // Running the completion block for download task which is either just showing
+        downloadCompletionBlock?()
     }
     
-    func testUpload(with data: Data) {
-        let urlString = "http://moscow.speedtest.rt.ru:8080/speedtest/upload.php"
-        guard let url = URL(string: urlString) else {
-            return
+    func urlSession(_ session: URLSession, task: URLSessionTask, didSendBodyData bytesSent: Int64, totalBytesSent: Int64, totalBytesExpectedToSend: Int64) {
+        
+        // Calculating speed by dividing size by time
+        self.stopTime = CFAbsoluteTimeGetCurrent()
+        let elapsed = self.stopTime - self.startTime
+        let speed = (Double(totalBytesSent) / elapsed ).bytesToMbit()
+        
+        // Showing current speed
+        DispatchQueue.main.async {
+            self.uploadSpeedCurrentLabel.text = String(format: "%.2f", speed)
         }
         
-        
-        
-        guard let urlRequest = URLRequest(url: url).createDataUploadRequest(fileName: "Test", data: data, mimeType: "img/jpeg") else {
-            return
-        }
-        
-        let sessionConfiguration = URLSessionConfiguration.ephemeral
-        sessionConfiguration.timeoutIntervalForResource = 100.0
-        
-        session!.dataTask(with: url).resume()
-        uploadTask = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
-            if let err = error {
-                //There's an error
-            }
-            else if let response = response {
-                print("response \(response)")
-                //check for response status
-            }
-            
-            //Stop the timer here
-            self.timer?.invalidate()
-            print("finished uploading data \(data)")
-        }
-        ___obs = uploadTask.progress.observe(\.fractionCompleted) { prog, _ in
-            let bytesSent = Double(data.count) * prog.fractionCompleted
-            guard Double(bytesSent) > Double(self.previousBytesSentFraction) else {
-                return
-            }
-            self.stopTime = CFAbsoluteTimeGetCurrent()
-            let elapsed = self.stopTime - self.startTime
-            let speed = (Double(bytesSent) / elapsed ).bytesToMbit()
-            print("upload speed fraction: \(speed)")
-            //Here you get the speed in Bytes/sec
-            self.previousBytesSentFraction = Int64(bytesSent)
-        }
-        uploadTask.resume()
+        print("upload speed \(speed)")
     }
 }
-
