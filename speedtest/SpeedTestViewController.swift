@@ -33,7 +33,7 @@ final class SpeedTestViewController: UIViewController {
     var bytesReceived: Int!
     
     // Shared URL session
-    var session: URLSession?
+    weak var session: URLSession?
     
     // Test image to get data for uploading
     let image = UIImage(named: Constants.testImageName)!
