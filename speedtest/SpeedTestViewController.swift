@@ -19,10 +19,16 @@ final class SpeedTestViewController: UIViewController {
     // MARK: - Actions
     
     @IBAction func userDidTapTestSpeedButton(_ sender: Any) {
-        checkSpeed()
+        // Running test after checking if user already started one
+        if !stateIsTestInProgress {
+            checkSpeed()
+        }
     }
     
     // MARK: - Properties
+    
+    // Used to define if the test is currently in progress
+    var stateIsTestInProgress = false
     
     // Used to show result speed and launch upload test if needed
     var downloadCompletionBlock: (() -> Void)?
@@ -54,6 +60,10 @@ final class SpeedTestViewController: UIViewController {
     // MARK: - Private functions
     
     private func checkSpeed() {
+        
+        // Changing state to prevent user from starting multiple tests at the same time
+        stateIsTestInProgress = true
+        
         // Checking if the user wants to check download and upload speed
         let checkState: (Bool, Bool) = (!SettingsManager.getSkipDownloadSpeed(), !SettingsManager.getSkipUploadSpeed())
         
@@ -66,6 +76,8 @@ final class SpeedTestViewController: UIViewController {
                     self.downloadSpeedMeasuredLabel.text = self.downloadSpeedCurrentLabel.text
                     self.downloadSpeedCurrentLabel.text = String(0.0)
                 }
+                // Changing the state, so the user can run the test again
+                stateIsTestInProgress = false
             }
         case (false, true):
             // If no data was downloaded previously then we use data from test image
@@ -136,6 +148,9 @@ final class SpeedTestViewController: UIViewController {
                 self.uploadSpeedMeasuredLabel.text = self.uploadSpeedCurrentLabel.text
                 self.uploadSpeedCurrentLabel.text = String(0.0)
             }
+            
+            // Changing the state, so the user can run the test again
+            stateIsTestInProgress = false
         }
         
         // Running the upload task

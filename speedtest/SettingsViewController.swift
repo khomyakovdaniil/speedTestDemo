@@ -79,7 +79,7 @@ final class SettingsViewController: UIViewController {
         case 2:
             UIApplication.shared.keyWindow?.overrideUserInterfaceStyle = .dark
         default:
-            return
+            UIApplication.shared.keyWindow?.overrideUserInterfaceStyle = .unspecified
         }
     }
 
